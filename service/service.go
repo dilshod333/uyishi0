@@ -17,7 +17,17 @@ func NewServer() (*Server, error) {
 
 	return &Server{ss: r}, nil
 }
-
+// CreateBook godoc
+// @Summary Create a new book
+// @Description Create a new book in the database
+// @Tags books
+// @Accept  json
+// @Produce  json
+// @Param book body models.Books true "Book to create"
+// @Success 200 {object} models.Books
+// @Failure 400 {string} string "Bad Request"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /books [post]
 func (s *Server) CreateBook(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method Wrong", http.StatusMethodNotAllowed)
@@ -40,6 +50,16 @@ func (s *Server) CreateBook(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(resp)
 }
 
+// GetBookID godoc
+// @Summary Get a book by ID
+// @Description Get a book from the database by its ID
+// @Tags books
+// @Produce  json
+// @Param id path string true "Book ID"
+// @Success 200 {object} models.Books
+// @Failure 404 {string} string "Book not found"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /books/{id} [get]
 func (s *Server) GetBookID(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Error on gettting id", http.StatusMethodNotAllowed)
