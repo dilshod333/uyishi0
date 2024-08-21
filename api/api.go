@@ -8,11 +8,20 @@ import (
 	"strconv"
 	"time"
 
+	_ "conn/docs" 
+
 	"github.com/felixge/httpsnoop"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
+// @title Example API
+// @version 1.0
+// @description This is a sample server.
+// @host localhost:8080
+// @BasePath /
 func ConnectApi() {
 	router := http.NewServeMux()
+	router.Handle("/swagger/", httpSwagger.WrapHandler)
 	n, err := service.NewServer()
 	if err != nil {
 		log.Println("Xatolik", err)
@@ -29,10 +38,6 @@ func ConnectApi() {
 	log.Println("Runnin on :7777")
 	log.Fatal(http.ListenAndServe(":7777", router))
 }
-
-
-
-
 
 func Metrics(next http.Handler) http.Handler {
 	totalRequest := expvar.NewInt("total_request_received")
@@ -52,4 +57,3 @@ func Metrics(next http.Handler) http.Handler {
 		totalreponsesentbystatus.Add(strconv.Itoa(metrics.Code), 1)
 	})
 }
-
